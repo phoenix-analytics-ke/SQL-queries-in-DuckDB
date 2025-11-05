@@ -120,9 +120,9 @@ HAVING COUNT(*) > 1;
 SELECT 
     COUNT(*) AS irrelevant
 FROM yellow_data
-WHERE year < 2015 AND > 2025;
+WHERE year < 2015 OR year > 2025;
 
 SELECT 
     COUNT(*) AS irrelevant
 FROM green_data
-WHERE year < 2015 AND > 2025;
+WHERE year < 2015 OR year > 2025;
