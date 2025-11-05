@@ -122,10 +122,10 @@ SELECT
     'Green' AS dataset,
     year,
    CASE 
-      WHEN EXTRACT(HOUR FROM tpep_pickup_datetime) BETWEEN 0 AND 11
-          THEN LPAD(CAST(EXTRACT(HOUR FROM tpep_pickup_datetime) AS VARCHAR), 2, '0') || ':' || '00' ||' ' || 'AM'
-      WHEN EXTRACT(HOUR FROM tpep_pickup_datetime) BETWEEN 12 AND 23
-          THEN LPAD(CAST(EXTRACT(HOUR FROM tpep_pickup_datetime) AS VARCHAR), 2, '0') || ':' || '00' ||' ' || 'PM'  
+      WHEN EXTRACT(HOUR FROM lpep_pickup_datetime) BETWEEN 0 AND 11
+          THEN LPAD(CAST(EXTRACT(HOUR FROM lpep_pickup_datetime) AS VARCHAR), 2, '0') || ':' || '00' ||' ' || 'AM'
+      WHEN EXTRACT(HOUR FROM lpep_pickup_datetime) BETWEEN 12 AND 23
+          THEN LPAD(CAST(EXTRACT(HOUR FROM lpep_pickup_datetime) AS VARCHAR), 2, '0') || ':' || '00' ||' ' || 'PM'  
       ELSE 'Invalid' END AS pickup_hour,
     COUNT(*) AS total_trips
 FROM green_data
