@@ -1,4 +1,5 @@
  --Monthly Revenue Summary
+ --Gives further insight on the total revenue composition by % contribution of fares,tips and surcharges to overall revenue per month.
 CREATE OR REPLACE TABLE fin_monthly_revenue AS
 SELECT
      year,
@@ -7,7 +8,11 @@ SELECT
      ROUND(SUM(fare_amount), 2) AS total_fare,
      ROUND(SUM(extra + mta_tax + improvement_surcharge + COALESCE(congestion_surcharge,0)), 2) AS total_surcharges,
      ROUND(SUM(tip_amount), 2) AS total_tips,
-     ROUND(SUM(total_amount), 2) AS total_revenue
+     ROUND(SUM(total_amount), 2) AS total_revenue,
+     ROUND(SUM(fare_amount) / NULLIF(SUM(total_amount),0) * 100, 2) AS fare_revenue_pct,
+     ROUND(SUM(tip_amount) / NULLIF(SUM(total_amount),0) * 100, 2) AS tips_revenue_pct,
+     ROUND(SUM(extra + mta_tax + improvement_surcharge + COALESCE(congestion_surcharge,0)) 
+          / NULLIF(SUM(total_amount),0) * 100, 2) AS surcharge_revenue_pct
 FROM yellow_data
 WHERE
    COALESCE(total_amount, 0) > 0
@@ -54,7 +59,9 @@ SELECT
     ROUND(AVG(y.tip_amount) , 3) AS avg_tip
 FROM yellow_data y
 LEFT JOIN taxi_zone_lookup z1 ON y.pulocationid = z1.locationid
-WHERE COALESCE(y.total_amount,0) > 0 AND COALESCE(y.trip_distance,0) > 0 AND year BETWEEN 2015 AND 2025
+WHERE COALESCE(y.total_amount,0) > 0 
+    AND COALESCE(y.trip_distance,0) > 0 
+    AND year BETWEEN 2015 AND 2025
 GROUP BY pickup_borough, year, month_num , month_name
 ORDER BY year,month_num, total_revenue DESC;
 
